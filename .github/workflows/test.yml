@@ -1,4 +1,4 @@
-name: Unit tests
+name: Build and test
 
 on:
   push:
@@ -11,8 +11,8 @@ permissions:
   contents: read
 
 jobs:
-  unit-tests:
-    name: Android unit tests
+  android:
+    name: Android tests and debug APK
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -31,3 +31,14 @@ jobs:
 
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest --no-daemon --stacktrace
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenStream-debug
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
