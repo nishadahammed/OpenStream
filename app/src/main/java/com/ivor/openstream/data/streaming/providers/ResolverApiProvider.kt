@@ -35,6 +35,7 @@ class ResolverApiProvider(
     private val client: OkHttpClient,
     private val json: Json,
     private val spec: ResolverApiSpec,
+    private val baseUrl: String,
     override val id: String,
     override val displayName: String,
     override val priority: Int
@@ -78,7 +79,7 @@ class ResolverApiProvider(
         providerId: String?,
         details: JsonElement? = null
     ): JsonElement {
-        val url = expand(requestSpec.url, identity, providerId, details)
+        val url = resolveUrl(expand(requestSpec.url, identity, providerId, details))
         val query = requestSpec.query.entries.joinToString("&") { (key, value) ->
             encoded(key) + "=" + encoded(expand(value, identity, providerId, details))
         }
@@ -161,6 +162,10 @@ class ResolverApiProvider(
         listOf(displayName, quality, language)
             .filter { !it.isNullOrBlank() }
             .joinToString(" · ")
+
+    private fun resolveUrl(url: String): String =
+        if (url.startsWith("https://") || url.startsWith("http://")) url
+        else baseUrl.trimEnd('/') + "/" + url.trimStart('/')
 
     private fun expand(
         template: String,
