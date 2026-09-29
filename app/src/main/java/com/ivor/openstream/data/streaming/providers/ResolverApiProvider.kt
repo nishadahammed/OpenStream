@@ -107,10 +107,10 @@ class ResolverApiProvider(
 
         return client.newCall(builder.build()).execute().use { response ->
             if (!response.isSuccessful) {
-                throw IllegalStateException("Resolver \${name} returned HTTP \${response.code}")
+                throw IllegalStateException("Resolver $displayName returned HTTP ${response.code}")
             }
             val raw = response.body?.string().orEmpty()
-            if (raw.isBlank()) throw IllegalStateException("Resolver \${name} returned an empty body")
+            if (raw.isBlank()) throw IllegalStateException("Resolver $displayName returned an empty body")
             json.parseToJsonElement(raw)
         }
     }
