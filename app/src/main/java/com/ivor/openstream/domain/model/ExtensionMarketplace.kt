@@ -63,7 +63,7 @@ data class ExtensionEngine(
             ExtensionEngineType.WEB_EMBED ->
                 listOfNotNull(movieUrl, tvUrl).any { it.startsWith("https://") }
             ExtensionEngineType.RESOLVER_API ->
-                resolver?.isRunnable == true
+                endpoint.startsWith("https://") && resolver?.isRunnable == true
             ExtensionEngineType.ANIKOTO,
             ExtensionEngineType.REANIME,
             ExtensionEngineType.ANIMEPAHE,
@@ -115,9 +115,9 @@ data class ResolverApiSpec(
     val response: ResolverApiResponse = ResolverApiResponse()
 ) {
     val isRunnable: Boolean
-        get() = playback.url.startsWith("https://") &&
-            (search?.url?.startsWith("https://") != false) &&
-            (details?.url?.startsWith("https://") != false)
+        get() = playback.url.isNotBlank() &&
+            (search == null || search.url.isNotBlank()) &&
+            (details == null || details.url.isNotBlank())
 }
 
 /** A single catalog entry as published by a repository. */
