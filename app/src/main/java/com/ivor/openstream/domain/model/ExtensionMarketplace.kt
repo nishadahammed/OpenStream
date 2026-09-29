@@ -95,6 +95,8 @@ data class ResolverApiRequest(
 data class ResolverApiResponse(
     val searchItemsPath: String = "",
     val providerIdPath: String = "id",
+    val titlePath: String? = "title",
+    val yearPath: String? = "year",
     val streamsPath: String = "",
     val streamUrlPath: String = "url",
     val qualityPath: String? = "quality",
