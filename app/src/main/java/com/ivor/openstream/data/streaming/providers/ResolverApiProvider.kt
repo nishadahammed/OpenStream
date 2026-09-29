@@ -163,9 +163,14 @@ class ResolverApiProvider(
             .filter { !it.isNullOrBlank() }
             .joinToString(" · ")
 
-    private fun resolveUrl(url: String): String =
-        if (url.startsWith("https://") || url.startsWith("http://")) url
-        else baseUrl.trimEnd('/') + "/" + url.trimStart('/')
+    private fun resolveUrl(url: String): String {
+        val trimmed = url.trim()
+        if (trimmed.startsWith("https://")) return trimmed
+        if (trimmed.startsWith("http://")) {
+            throw IllegalArgumentException("Resolver $displayName only permits HTTPS URLs")
+        }
+        return baseUrl.trimEnd('/') + "/" + trimmed.trimStart('/')
+    }
 
     private fun expand(
         template: String,
@@ -205,9 +210,10 @@ class ResolverApiProvider(
     }
 
     private fun JsonElement.asCandidates(): List<JsonElement> = when (this) {
-        is JsonArray -> this
-        is JsonObject -> if (this.stringValue() != null) listOf(this) else this.values.toList()
-        else -> if (this.stringValue() != null) listOf(this) else emptyList()
+        is JsonArray -> this.toList()
+        is JsonObject -> listOf(this)
+        is JsonPrimitive -> if (this.contentOrNull?.isNotBlank() == true) listOf(this) else emptyList()
+        else -> emptyList()
     }
 
     private fun JsonElement.stringValue(): String? =
