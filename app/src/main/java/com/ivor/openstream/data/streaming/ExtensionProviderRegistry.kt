@@ -115,6 +115,7 @@ class ExtensionProviderRegistry @Inject constructor(
                 client = streamingClient,
                 json = json,
                 spec = engine.resolver ?: return null,
+                baseUrl = engine.endpoint,
                 id = manifest.id,
                 displayName = manifest.name,
                 priority = engine.priority
