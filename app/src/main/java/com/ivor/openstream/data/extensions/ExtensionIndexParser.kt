@@ -98,6 +98,8 @@ class ExtensionIndexParser @Inject constructor() {
                         response = ResolverApiResponse(
                             searchItemsPath = resolver.response.searchItemsPath,
                             providerIdPath = resolver.response.providerIdPath,
+                            titlePath = resolver.response.titlePath,
+                            yearPath = resolver.response.yearPath,
                             streamsPath = resolver.response.streamsPath,
                             streamUrlPath = resolver.response.streamUrlPath,
                             qualityPath = resolver.response.qualityPath,
