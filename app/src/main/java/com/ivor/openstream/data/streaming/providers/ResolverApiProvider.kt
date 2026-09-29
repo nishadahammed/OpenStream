@@ -144,7 +144,7 @@ class ResolverApiProvider(
             val audio = response.audioPath?.let { element.at(it).stringValue() } ?: language
 
             VideoServer(
-                id = "\${id}-\${url.hashCode()}",
+                id = "$id-${url.hashCode()}",
                 providerId = id,
                 providerName = displayName,
                 name = buildName(quality, language),
